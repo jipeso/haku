@@ -22,6 +22,3 @@ jobs:
           version: v2.15.0
       - run: go test -race ./...
       - run: go tool govulncheck ./...
-      - name: sqlc output is up to date
-        if: hashFiles('sqlc.yaml') != ''
-        run: go tool sqlc diff

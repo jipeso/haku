@@ -1,21 +1,20 @@
 # haku
 
-Telegram bot that sends a daily digest of new Finnish job listings matching each user's keywords.
-Go 1.27, SQLite (modernc, sqlc, goose), Docker. Spec: docs/PLAN.md — read the relevant section before starting work.
+Personal Telegram bot: reads job alert emails from a dedicated mailbox and sends the owner one daily digest of new listings.
+Go 1.27, SQLite (modernc, plain database/sql), IMAP (go-imap), Docker. Spec: docs/PLAN.md — read the relevant section before starting work.
 
 ## Commands
 
-- `make dev` — run in Docker with live reload (uses the dev bot from .env)
+- `make dev` — run in Docker with live reload (dry run: never marks mail read or sends to Telegram)
 - `make check` — build + vet + test (must pass before finishing)
 - `make lint` — golangci-lint
-- `make generate` — regenerate sqlc code after editing store/queries.sql or migrations
-- `go run ./cmd/haku check --dry-run --keyword <k>` — live smoke test against real boards
+- `go run ./cmd/haku digest --dry-run` — parse the real mailbox and print the digest
 
 ## Conventions
 
 - Minimal and clean: simplest code that meets the spec; no abstractions, options or interfaces it doesn't need. Full style rules: docs/PLAN.md §3.2.
+- Single user, no commands, no scraping: haku only reads alert emails and sends Telegram messages.
 - Standard library first; new dependencies need a reason in docs/PLAN.md.
-- Tests never touch the network: save real responses in testdata/ and use httptest.
+- Tests never touch the network: real emails live in internal/alert/testdata/*.eml; use httptest for Telegram.
 - Inject time (`now func() time.Time`); all dates are Europe/Helsinki.
-- Never edit store/db/ by hand — it is sqlc output.
-- Boards: follow docs/PLAN.md §5 politeness rules. Never add workarounds for blocking.
+- Only production marks mail read. Anything run in dev uses `--dry-run`.

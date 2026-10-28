@@ -1,4 +1,4 @@
-.PHONY: dev test lint generate check fix vuln
+.PHONY: dev test lint check fix vuln
 
 dev:
 	docker compose up --build
@@ -8,9 +8,6 @@ test:
 
 lint:
 	golangci-lint run
-
-generate:
-	go tool sqlc generate
 
 check:
 	go build -o /dev/null ./...
