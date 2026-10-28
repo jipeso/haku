@@ -1,0 +1,7 @@
+tmp_dir = "/tmp/air"
+
+[build]
+cmd = "go build -o /tmp/air/haku ./cmd/haku"
+entrypoint = ["/tmp/air/haku", "run"]
+include_ext = ["go", "sql"]
+exclude_dir = ["docs", "deploy", "testdata"]

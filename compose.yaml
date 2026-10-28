@@ -1,0 +1,18 @@
+services:
+  haku:
+    build:
+      context: .
+      target: dev
+    env_file: .env
+    environment:
+      DB_PATH: /data/haku.db
+    volumes:
+      - .:/src
+      - gomod:/go/pkg/mod
+      - gocache:/root/.cache/go-build
+      - data:/data
+
+volumes:
+  gomod:
+  gocache:
+  data:
